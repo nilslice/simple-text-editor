@@ -1,5 +1,8 @@
 # Simple Text Editor
 
+[![crates.io](https://img.shields.io/crates/v/simple-text-editor.svg)](https://crates.io/crates/simple-text-editor)
+[![docs.rs](https://docs.rs/simple-text-editor/badge.svg)](https://docs.rs/simple-text-editor)
+
 This program implements a basic text editing protocol in which the following commands can be executed:
 
 - `1 x`, where `1` is the command to append text to a buffer, and `x` is the arbitrary-length set of characters to append.
