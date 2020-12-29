@@ -2,6 +2,7 @@
 
 [![crates.io](https://img.shields.io/crates/v/simple-text-editor.svg)](https://crates.io/crates/simple-text-editor)
 [![docs.rs](https://docs.rs/simple-text-editor/badge.svg)](https://docs.rs/simple-text-editor)
+[![CI](https://github.com/nilslice/simple-text-editor/workflows/simple-text-editor%20CI/badge.svg)](https://github.com/nilslice/simple-text-editor/actions/)
 
 This program implements a basic text editing protocol in which the following commands can be executed:
 

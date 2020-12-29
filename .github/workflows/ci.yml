@@ -1,0 +1,21 @@
+on: [push, pull_request]
+name: simple-text-editor CI
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo test
+  run_with_input:
+    name: Run Binary with Input
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo build --bin editor && cat input.txt | ./target/debug/editor
