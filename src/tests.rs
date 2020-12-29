@@ -71,7 +71,7 @@ fn test_apply_ops() {
         4 
         3 1"#;
     if let Some(ops) = crate::ops::parse(input) {
-        let mut text = crate::text::Text::new("".into(), ops.0);
+        let mut text = crate::text::Text::new("", ops.0);
         text.apply(ops.1);
         assert_eq!("abc", text.output());
     }   

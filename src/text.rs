@@ -15,9 +15,9 @@ pub struct Text {
 
 impl Text {
     /// Creates a new `Text` instance, which can start from an initial state instead of an empty buffer.
-    pub fn new(init: String, num_ops: usize) -> Self {
+    pub fn new(init: impl AsRef<str>, num_ops: usize) -> Self {
         Self {
-            value: init, 
+            value: init.as_ref().into(), 
             num_ops,
             operation_stack: vec![],
         }
