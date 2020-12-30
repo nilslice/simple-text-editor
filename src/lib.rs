@@ -1,3 +1,3 @@
 pub mod ops;
-pub mod text;
 mod tests;
+pub mod text;
