@@ -4,22 +4,77 @@
 pub enum Operation<'a> {
     /// The append command, denotated by `1` in the program's input. The associated `&'a str`
     /// contains the string data to be appended to the buffer.
+    /// ```
+    /// use simple_text_editor::ops::*;
+    /// let op = "1 append this text".into();
+    /// match op {
+    ///     Operation::Append(val) => {
+    ///         assert_eq!(val, "append this text");
+    ///     }
+    ///     _ => panic!("should have matched Operation::Append"),
+    /// }
+    /// ```
     Append(&'a str),
     /// The delete command, denotated by `2` in the program's input. The associated `usize` is the
     /// number of characters to be delete from the back of the buffer.
+    /// ```
+    /// use simple_text_editor::ops::*;
+    /// let op = "2 5".into();
+    /// match op {
+    ///     Operation::Delete(n) => {
+    ///         assert_eq!(n, 5);
+    ///     }
+    ///     _ => panic!("should have matched Operation::Delete"),
+    /// }
+    /// ```
     Delete(usize),
     /// The print command, denotated by `3` in the program's input. The associated `usize` is the
     /// 1-based index at which the character from the buffer should be printed.
+    /// ```
+    /// use simple_text_editor::ops::*;
+    /// let op = "3 1".into();
+    /// match op {
+    ///     Operation::Print(i) => {
+    ///         assert_eq!(i, 1);
+    ///     }
+    ///     _ => panic!("should have matched Operation::Print"),
+    /// }
+    /// ```
     Print(usize),
     /// The undo command, denotated by `4` in the program's input. There is no associated data, and
     /// thus simply pops a command from a maintained stack of undo-eligible operations, either being
     /// append or delete.
+    /// ```
+    /// use simple_text_editor::ops::*;
+    /// let op = "4".into();
+    /// match op {
+    ///     Operation::Undo => {
+    ///         assert!(true);
+    ///     }
+    ///     _ => panic!("should have matched Operation::Undo"),
+    /// }
+    /// ```
     Undo,
     /// Invalid is a catch-all for any unrecognized commands, and is ignored by the program.
+    /// ```
+    /// use simple_text_editor::ops::*;
+    /// let op = "__BADOPERATION__".into();
+    /// match op {
+    ///     Operation::Invalid => {
+    ///         assert!(true);
+    ///     }
+    ///     _ => panic!("should have matched Operation::Invalid"),
+    /// }
+    /// ```
     Invalid,
 }
 
 /// Convert a line of input into an Operation.
+/// ```
+/// use simple_text_editor::ops::*;
+/// let op = "1 abc".into();
+/// assert!(matches!(op, Operation::Append("abc")));
+/// ```
 impl<'a> From<&'a str> for Operation<'a> {
     fn from(input: &'a str) -> Self {
         let input = input.trim_start();
@@ -63,6 +118,28 @@ fn parse_delete_or_print(op: char, value_to_parse: &str) -> Operation {
 }
 
 /// Parse all operations from combined input, including the command count (first line).
+/// ```
+/// use simple_text_editor::ops::*;
+/// assert_eq!(
+///     parse(
+///         r#"4
+/// 1 abc
+/// 2 1
+/// 3 1
+/// 4
+/// "#
+///     ),
+///     Some((
+///         4 as usize,
+///         vec![
+///             Operation::Append("abc"),
+///             Operation::Delete(1),
+///             Operation::Print(1),
+///             Operation::Undo,
+///         ]
+///     ))
+/// );
+/// ```
 pub fn parse(input: &str) -> Option<(usize, Vec<Operation>)> {
     let lines = input.lines();
     let num_ops = lines.clone().take(1).next().unwrap_or_default().parse();
@@ -82,7 +159,7 @@ pub enum UndoableOperation {
     /// count of characters which had been appended, and should now be deleted from the back of
     /// the buffer.
     Append(usize),
-    /// the undo operation for a previously executed delete command. The associated `Vec<u8>` is the
+    /// The undo operation for a previously executed delete command. The associated `Vec<u8>` is the
     /// set of characters which had been previously popped from the back of the buffer, and should
     /// now be re-appended. Note, the characters are in reverse-order, which is the natural order
     /// after they had been popped from the buffer. As an optimization, the program will lazily

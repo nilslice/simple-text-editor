@@ -1,7 +1,7 @@
 #[test]
 fn test_op_from_str() {
     use crate::ops::Operation;
-    let cases = &[
+    &[
         ("1 abc", Operation::Append("abc")),
         ("1  abc", Operation::Append(" abc")),
         ("1  ", Operation::Append(" ")),
@@ -16,11 +16,11 @@ fn test_op_from_str() {
         ("", Operation::Invalid),
         (" ", Operation::Invalid),
         ("    ", Operation::Invalid),
-    ];
-
-    for case in cases {
+    ]
+    .iter()
+    .for_each(|case| {
         assert_eq!(Operation::from(case.0), case.1);
-    }
+    });
 }
 
 #[test]
@@ -64,18 +64,21 @@ fn test_apply_ops() {
     // 4        # undo the last append or delete operation (and remove it from history stack)
     // 3 1      # print the character at position 1 (starting at 1)
 
-    let input = r#"8
-        1 abc
-        3 3
-        2 3
-        1 xy
-        3 2
-        4 
-        4 
-        3 1"#;
-    if let Some(ops) = crate::ops::parse(input) {
-        let mut text = crate::text::Text::new("", ops.0);
-        text.apply(ops.1);
-        assert_eq!("abc", text.output());
-    }
+    let (count, ops) = crate::ops::parse(
+        r#"8
+    1 abc
+    3 3
+    2 3
+    1 xy
+    3 2
+    4 
+    4 
+    3 1"#,
+    )
+    .unwrap();
+    assert_eq!(count, ops.len());
+
+    let mut text = crate::text::Text::new("", count);
+    text.apply(ops);
+    assert_eq!("abc", text.output());
 }

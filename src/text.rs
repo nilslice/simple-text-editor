@@ -16,6 +16,19 @@ pub struct Text {
     operation_stack: Vec<UndoableOperation>,
 }
 
+/// ```
+/// use simple_text_editor::ops;
+/// use simple_text_editor::text::Text;
+/// let (num_ops, ops) = ops::parse(r#"4
+/// 1 hello
+/// 2 1
+/// 2 1
+/// 1 p me!
+/// "#).unwrap();
+/// let mut text = Text::new("", num_ops);
+/// text.apply(ops);
+/// assert_eq!(text.output(), "help me!".to_string());
+/// ```
 impl Text {
     /// Creates a new `Text` instance, which can start from an initial state instead of an empty buffer.
     pub fn new(init: impl AsRef<str>, num_ops: usize) -> Self {
@@ -37,7 +50,7 @@ impl Text {
         );
         assert!(
             ops.len() == self.num_ops,
-            format!("The provided count doesn't match the number of operations listed. (count = {}, operations = {})", self.num_ops, ops.len())
+            format!("The provided count doesn't match the number of valid operations parsed. (count = {}, valid operations = {})", self.num_ops, ops.len())
         );
 
         let mut delete_count = 0 as usize;
