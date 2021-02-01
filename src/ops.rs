@@ -98,22 +98,22 @@ impl<'a> From<&'a str> for Operation<'a> {
 fn remove_sep_space(val: &str) -> &str {
     let mut chars = val.chars();
     if let Some((_, rest)) = chars.next().map(|c| (c, chars.as_str())) {
-        return rest;
+        rest
     } else {
-        return val;
+        val
     }
 }
 
 /// Combine parsing logic from input when dealing with delete or print operations.
 fn parse_delete_or_print(op: char, value_to_parse: &str) -> Operation {
     if let Ok(val) = value_to_parse.trim().parse::<usize>() {
-        return match op {
+        match op {
             '2' => Operation::Delete(val),
             '3' => Operation::Print(val),
             _ => Operation::Invalid,
-        };
+        }
     } else {
-        return Operation::Invalid;
+        Operation::Invalid
     }
 }
 

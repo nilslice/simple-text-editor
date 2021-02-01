@@ -40,7 +40,7 @@ impl Text {
     }
 
     /// Mutates the `Text` instance by executing each operation in `ops` serially.
-    pub fn apply<'a>(&mut self, ops: Vec<Operation<'a>>) {
+    pub fn apply(&mut self, ops: Vec<Operation>) {
         assert!(
             ops.len() <= MAX_OPS,
             format!(
@@ -53,7 +53,7 @@ impl Text {
             format!("The provided count doesn't match the number of valid operations parsed. (count = {}, valid operations = {})", self.num_ops, ops.len())
         );
 
-        let mut delete_count = 0 as usize;
+        let mut delete_count = 0_usize;
         for op in ops {
             match op {
                 // append the value to the inner buffer, and push an undoable operation to the operation stack,
