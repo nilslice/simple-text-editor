@@ -1,6 +1,6 @@
 [package]
 name = "simple-text-editor"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Steve Manuel <nilslice@gmail.com>"]
 edition = "2018"
 description = "Basic implementation of a simple text editor, as a Rust library and CLI."
